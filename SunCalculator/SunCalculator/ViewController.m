@@ -19,12 +19,15 @@
 @property (weak, nonatomic) IBOutlet UITextField *tf_dateMonth;
 @property (weak, nonatomic) IBOutlet UITextField *tf_dateYear;
 @property (weak, nonatomic) IBOutlet UILabel *lb_result;
+@property (strong, nonatomic) NSArray *textFields;
 
 @end
 
 @implementation ViewController
 
 -(void)viewDidLoad{
+
+    self.textFields = @[self.tf_latitude, self.tf_longitude, self.tf_dateDay, self.tf_dateMonth, self.tf_dateYear];
     
     self.tf_latitude.text = @"52.5";
     self.tf_longitude.text = @"-13.5";
@@ -49,16 +52,26 @@
 
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField{
-    
-    if(textField == self.tf_latitude ||
-       textField == self.tf_longitude ||
-       textField == self.tf_dateYear ||
-       textField == self.tf_dateMonth ||
-       textField == self.tf_dateDay){
-        
-        [textField resignFirstResponder];
-        return YES;
-        
+
+
+    NSUInteger i = 0;
+    for(UITextField *tf in self.textFields){
+
+        if(tf == textField){
+
+            BOOL isLast = i == ([self.textFields count] - 1);
+            if(isLast){
+
+                [textField resignFirstResponder];
+                [self doCalc];
+
+            }else{
+
+                [self.textFields[++i] becomeFirstResponder];
+            }
+            return YES;
+        }
+        i++;
     }
     return NO;
 }
@@ -71,12 +84,12 @@
     [_tf_dateMonth endEditing:YES];
     [_tf_dateDay endEditing:YES];
 
-    [self updateResultText];
+    [self doCalc];
 }
 
 
 
-- (void)updateResultText {
+- (void)doCalc {
 
     NSString *latitudeString = [self.tf_latitude.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     NSString *longitudeString = [self.tf_longitude.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
