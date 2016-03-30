@@ -8,6 +8,18 @@
 
 @implementation DateTool
 
++ (BOOL)validateDateForYear:(int)inputYear month:(int)inputMonth day:(int)inputDay{
+
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    dateFormatter.dateFormat = @"yyyyMMdd";
+
+    NSString *inputString = [NSString stringWithFormat:@"%04d%02d%02d",inputYear,inputMonth,inputDay];
+
+    NSDate *date = [dateFormatter dateFromString:inputString];
+
+    return nil != date;
+}
+
 + (NSDate *)getDateForYear:(int)inputYear month:(int)inputMonth day:(int)inputDay{
 
     NSDateComponents *comp = [[NSDateComponents alloc] init];

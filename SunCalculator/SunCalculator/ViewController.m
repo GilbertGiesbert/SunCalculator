@@ -78,26 +78,45 @@
 
 - (void)updateResultText {
 
-    NSString *regexString = @"[0-9|.]+";
-    if(![self validate:self.tf_latitude.text with:regexString] ||
-            ![self validate:self.tf_longitude.text with:regexString] ||
-            ![self validate:self.tf_dateYear.text with:regexString] ||
-            ![self validate:self.tf_dateMonth.text with:regexString] ||
-            ![self validate:self.tf_dateDay.text with:regexString]){
+    NSString *latitudeString = [self.tf_latitude.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    NSString *longitudeString = [self.tf_longitude.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    NSString *yearString = [self.tf_dateYear.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    NSString *monthString = [self.tf_dateMonth.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    NSString *dayString = [self.tf_dateDay.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 
-        self.lb_result.text = @"invalid input - can't calculate";
+    NSString *inputsString = [NSString stringWithFormat:@"inputs: latitude: %@; longitude: %@; year: %@; month: %@; day: %@", latitudeString, longitudeString, yearString, monthString, dayString];
+    NSLog(@"%@", inputsString);
+
+    NSString *regexValidDouble = @"^[-]{0,1}[0-9]+[.]{0,1}[0-9]*$";
+    if(     ![self validate:latitudeString with:regexValidDouble] ||
+            ![self validate:longitudeString with:regexValidDouble] ||
+            ![self validate:yearString with:regexValidDouble] ||
+            ![self validate:monthString with:regexValidDouble] ||
+            ![self validate:dayString with:regexValidDouble]){
+
+        self.lb_result.text = @"can't calc\ninputs must be valid numbers";
         return;
     }
 
+    double latitude = [latitudeString doubleValue];
+    double longitude = [longitudeString doubleValue];
+    NSInteger year = [yearString intValue];
+    NSInteger month = [monthString intValue];
+    NSInteger day = [dayString intValue];
 
-    double latitude = [self.tf_latitude.text doubleValue];
-    double longitude = [self.tf_longitude.text doubleValue];
-    NSInteger year = [self.tf_dateYear.text intValue];
-    NSInteger month = [self.tf_dateMonth.text intValue];
-    NSInteger day = [self.tf_dateDay.text intValue];
+    if(latitude < -180 || longitude < -180 || latitude > 180 || longitude > 180){
 
-    NSString *inputsString = [NSString stringWithFormat:@"inputs: latitude: %f; longitude: %f; year: %d; month: %d; day: %d", latitude, longitude, year, month, day];
-    NSLog(@"%@", inputsString);
+        self.lb_result.text = @"can't calc\nlat & long must be in range [ -180 ; 180 ]";
+        return;
+
+    }
+
+    if(![DateTool validateDateForYear:year month:month day:day]){
+
+        self.lb_result.text = @"can't calc\ndate must exist";
+        return;
+    }
+
 
     NSDate *inputDate = [DateTool getDateForYear:year month:month day:day];
     NSString *sunrise = [SunCalculatorV1 calcSunriseForDate:inputDate latitude:latitude longitude:longitude];

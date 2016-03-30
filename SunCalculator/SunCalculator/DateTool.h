@@ -12,6 +12,8 @@
 
 @interface DateTool : NSObject
 
++ (BOOL)validateDateForYear:(int)inputYear month:(int)inputMonth day:(int)inputDay;
+
 + (NSDate *)getDateForYear:(int)inputYear month:(int)inputMonth day:(int)inputDay;
 
 + (NSInteger)getJulianDayCountForYear:(int)inputYear month:(int)inputMonth day:(int)inputDay;
