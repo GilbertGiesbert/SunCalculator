@@ -3,80 +3,78 @@
 // Copyright (c) 2016 ___FULLUSERNAME___. All rights reserved.
 //
 
+// This calculator is based on https://en.wikipedia.org/wiki/Sunrise_equation
+
 #import "SunCalculatorV2.h"
 #import "DateTool.h"
+#import "MyLog.h"
 
 
 @implementation SunCalculatorV2
 
 
-+ (double) getMeanSolarNoonWithJulianDayCount:(double)julianDayCount westernLongitude:(double)westernLongitude{
-
-    return westernLongitude / 360.0 + julianDayCount;
-}
-
-+ (double) getSolarMeanAnomaly:(double)meanSolarNoon{
-    return fmod((357.5291 + 0.98560028 * meanSolarNoon), 360);
-}
-
-+ (double)getEquationOfTheCenter:(double)solarMeanAnomaly{
-    return 1.9148 * sin(solarMeanAnomaly) + 0.0200 * sin(2*solarMeanAnomaly) + 0.0003 * sin(3*solarMeanAnomaly);
-}
-
-+ (double)getEclipticLongitudeWithSolarMeanAnomaly:(double)solarMeanAnomaly equationOfTheCenter:(double)equationOfTheCenter{
-    return fmod((solarMeanAnomaly + equationOfTheCenter + 180 + 102.9372), 360);
-}
-
-+ (double)getSolarTransitWithMeanSolarNoon:(double)meanSolarNoon solarMeanAnomaly:(double)solarMeanAnomaly epilipticLongitude:(double)epilipticLongitude{
-    return 2451545.0 + meanSolarNoon - (0.0053 * sin(solarMeanAnomaly) - 0.0069*sin(2*epilipticLongitude));
-}
-
-+ (double)getDeclinationOfTheSun:(double)epilepticLongitude{
-    return asin(sin(epilepticLongitude) * sin(23.44));
-}
-
-+ (double)getHourAngleWithNorthLatitude:(double)northLatitude declinationOfTheSun:(double)declinationOfTheSun{
-    return acos(  (sin(-0.83) - sin(northLatitude) * sin(declinationOfTheSun)) / (cos(northLatitude) * cos(declinationOfTheSun))   );
-}
-
-+ (double)getJulianDateOfSunriseWithSolarTransit:(double)solarTransit hourAngle:(double)hourAngle{
-    return solarTransit - hourAngle / 360.0;
-}
-
-+ (NSString *)getSunriseForYear:(int)year month:(int)month day:(int)day latitude:(double)latitude longitude:(double)longitude{
-
-    NSInteger julianDayCount = [DateTool getJulianDayCountForYear:year month:month day:day];
-    NSLog(@"julianDayCount: %d", julianDayCount);
 
 
-    double julianDayCountExact = julianDayCount + JULIAN_DAY_COUNT_FOR_LEAP_SECONDS;
-    NSLog(@"julianDayCountExact: %f", julianDayCountExact);
 
-    double meanSolarNoon = [self getMeanSolarNoonWithJulianDayCount:julianDayCountExact westernLongitude:longitude];
-    NSLog(@"meanSolarNoon: %f", meanSolarNoon);
 
-    double solarMeanAnomaly = [self getSolarMeanAnomaly:meanSolarNoon];
-    NSLog(@"solarMeanAnomaly: %f", solarMeanAnomaly);
++ (NSString *)calcSunriseForDate:(NSDate *)date latitude:(double)latitude longitude:(double)longitude{
 
-    double equationOfTheCenter = [self getEquationOfTheCenter:solarMeanAnomaly];
-    NSLog(@"equationOfTheCenter: %f", equationOfTheCenter);
+    // n
+    NSInteger currentJulianDay = [DateTool getJulianDayCountFor:date];
+    MyLog(@"currentJulianDay: %d", currentJulianDay);
 
-    double epilepticLongitude = [self getEclipticLongitudeWithSolarMeanAnomaly:solarMeanAnomaly equationOfTheCenter:equationOfTheCenter];
-    NSLog(@"epilepticLongitude: %f", epilepticLongitude);
+    // J*
+    double meanSolarNoon = longitude / 360.0 + currentJulianDay;
+    MyLog(@"meanSolarNoon: %f", meanSolarNoon);
 
-    double solarTransit = [self getSolarTransitWithMeanSolarNoon:meanSolarNoon solarMeanAnomaly:solarMeanAnomaly epilipticLongitude:epilepticLongitude];
-    NSLog(@"solarTransit: %f", solarTransit);
+    // M
+    double solarMeanAnomaly = fmod((357.5291 + 0.98560028 * meanSolarNoon), 360);
+    MyLog(@"solarMeanAnomaly: %f", solarMeanAnomaly);
 
-    double declinationOfTheSun = [self getDeclinationOfTheSun:epilepticLongitude];
-    NSLog(@"declinationOfTheSun: %f", declinationOfTheSun);
+    // C
+    double equationOfTheCenter = 1.9148 * sin(solarMeanAnomaly) + 0.0200 * sin(2*solarMeanAnomaly) + 0.0003 * sin(3*solarMeanAnomaly);
+    MyLog(@"equationOfTheCenter: %f", equationOfTheCenter);
 
-    double hourAngle = [self getHourAngleWithNorthLatitude:latitude declinationOfTheSun:declinationOfTheSun];
-    NSLog(@"hourAngle: %f", hourAngle);
+    // λ
+    double epilipticLongitude = fmod((solarMeanAnomaly + equationOfTheCenter + 180.0 + 102.9372), 360);
+    MyLog(@"epilipticLongitude: %f", epilipticLongitude);
 
-    double julianDaysSunrise = [self getJulianDateOfSunriseWithSolarTransit:solarTransit hourAngle:hourAngle];
-    NSLog(@"julianDaysSunrise: %f", julianDaysSunrise);
+    // J-transit
+    double solarTransit = 2451545.0 + meanSolarNoon - (0.0053 * sin(solarMeanAnomaly) - 0.0069*sin(2*epilipticLongitude));
+    MyLog(@"solarTransit: %f", solarTransit);
 
-    return [NSString stringWithFormat: @"%f", julianDaysSunrise];
+    // δ
+    double declinationOfTheSun = asin( sin(epilipticLongitude) * sin(23.44) );
+    MyLog(@"declinationOfTheSun: %f", declinationOfTheSun);
+
+    // ω
+    double hourAngle = acos(  (sin(-0.83) - sin(latitude) * sin(declinationOfTheSun)) / (cos(latitude) * cos(declinationOfTheSun))   );
+    MyLog(@"hourAngle: %f", hourAngle);
+
+
+    // J-set
+    double julianDaysSunset = solarTransit + hourAngle / 360.0;
+    MyLog(@"julianDaysSunset: %f", julianDaysSunset);
+
+    // J-rise
+    double julianDaysSunrise = solarTransit - hourAngle / 360.0;
+    MyLog(@"julianDaysSunrise: %f", julianDaysSunrise);
+
+
+
+
+    NSDate *gregorianSunset = [DateTool julianDaysToGregorianDate:julianDaysSunset];
+    NSDate *gregorianSunrise = [DateTool julianDaysToGregorianDate:julianDaysSunrise];
+
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+    [dateFormat setDateFormat:@"yyyy.MM.dd - HH:mm"];
+
+    NSString *sunset  = [dateFormat stringFromDate:gregorianSunset];
+    MyLog(@"sunset %@", sunset);
+    NSString *sunrise = [dateFormat stringFromDate:gregorianSunrise];
+    MyLog(@"sunrise %@", sunrise);
+
+    return [NSString stringWithFormat: @"sunrise: %@\nsunset: %@", sunrise, sunset];
 
 }
 

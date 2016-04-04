@@ -10,6 +10,9 @@
 #import "ViewController.h"
 #import "SunCalculatorV1.h"
 #import "DateTool.h"
+#import "SunCalculatorV2.h"
+#import "MyLog.h"
+#import "SunCalculatorV3.h"
 
 
 @interface ViewController () <UITextFieldDelegate>
@@ -18,7 +21,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *tf_dateDay;
 @property (weak, nonatomic) IBOutlet UITextField *tf_dateMonth;
 @property (weak, nonatomic) IBOutlet UITextField *tf_dateYear;
-@property (weak, nonatomic) IBOutlet UILabel *lb_result;
+@property (weak, nonatomic) IBOutlet UITextView *tv_result;
 @property (strong, nonatomic) NSArray *textFields;
 
 @end
@@ -46,7 +49,9 @@
     self.tf_dateYear.text = [dateFormat stringFromDate:now];
 
     [dateFormat setDateFormat:@"dd.MM.yyyy - hh:mm:ss"];
-    self.lb_result.text = [NSString stringWithFormat:@"app started at %@", [dateFormat stringFromDate:now]];
+    self.tv_result.text = [NSString stringWithFormat:@"app started at %@", [dateFormat stringFromDate:now]];
+
+
 
 }
 
@@ -63,7 +68,7 @@
             if(isLast){
 
                 [textField resignFirstResponder];
-                [self doCalc];
+                [self processInputs];
 
             }else{
 
@@ -84,12 +89,12 @@
     [_tf_dateMonth endEditing:YES];
     [_tf_dateDay endEditing:YES];
 
-    [self doCalc];
+    NSString *result = [self processInputs];
+    self.tv_result.text = result;
 }
 
 
-
-- (void)doCalc {
+- (NSString *)processInputs {
 
     NSString *latitudeString = [self.tf_latitude.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     NSString *longitudeString = [self.tf_longitude.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
@@ -107,8 +112,7 @@
             ![self validate:monthString with:regexValidDouble] ||
             ![self validate:dayString with:regexValidDouble]){
 
-        self.lb_result.text = @"can't calc\ninputs must be valid numbers";
-        return;
+        return @"can't calc\ninputs must be valid numbers";
     }
 
     double latitude = [latitudeString doubleValue];
@@ -119,31 +123,40 @@
 
     if(latitude < -180 || longitude < -180 || latitude > 180 || longitude > 180){
 
-        self.lb_result.text = @"can't calc\nlat & long must be in range [ -180 ; 180 ]";
-        return;
-
+        return @"can't calc\nlat & long must be in range [ -180 ; 180 ]";
     }
 
     if(![DateTool validateDateForYear:year month:month day:day]){
 
-        self.lb_result.text = @"can't calc\ndate must exist";
-        return;
+        return @"can't calc\ndate must exist";
     }
 
 
     NSDate *inputDate = [DateTool getDateForYear:year month:month day:day];
-    NSString *sunrise = [SunCalculatorV1 calcSunriseForDate:inputDate latitude:latitude longitude:longitude];
-    NSString *sunset = [SunCalculatorV1 calcSunsetForDate:inputDate latitude:latitude longitude:longitude];
+    NSString *julianDate = [NSString stringWithFormat:@"Julian date: %d", [DateTool getJulianDayCountFor:inputDate]];
+    NSString *daysSince2000 = [NSString stringWithFormat:@"days since 2000: %d", [DateTool getDayCountSince2000For:inputDate]];
+    NSString *dateToolInfo = [NSString stringWithFormat:@"DateTool\n%@\n%@", julianDate, daysSince2000];
 
-    NSString *resultText = [NSString stringWithFormat:@"%@\n\n%@\n\n%@", inputsString, sunrise, sunset];
 
-    self.lb_result.text = resultText;
+    NSString *sunriseV1 = [SunCalculatorV1 calcSunriseForDate:inputDate latitude:latitude longitude:longitude];
+    NSString *sunsetV1 = [SunCalculatorV1 calcSunsetForDate:inputDate latitude:latitude longitude:longitude];
+    NSString *v1Info = [NSString stringWithFormat:@"V1\n%@\n%@", sunriseV1, sunsetV1];
 
+    NSString *sunriseV2 = [SunCalculatorV2 calcSunriseForDate:inputDate latitude:latitude longitude:longitude];
+    NSString *v2Info = [NSString stringWithFormat:@"V2\n%@", sunriseV2];
+
+    NSString *sunriseAndSunsetV3 = [SunCalculatorV3 calcSunriseAndSunsetForDate:inputDate latitude:latitude longitude:longitude];
+    NSString *v3Info = [NSString stringWithFormat:@"V3\n%@", sunriseAndSunsetV3];
+
+
+
+
+    NSString *resultText = [NSString stringWithFormat:@"%@\n\n%@\n\n%@\n\n%@\n\n%@", inputsString, dateToolInfo, v1Info, v2Info, v3Info];
+    return resultText;
 }
 
 - (BOOL)validate:(NSString *)inputString with:(NSString *)regexString
 {
-
     NSError *error = NULL;
     NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:regexString
                                                                            options:NSRegularExpressionCaseInsensitive

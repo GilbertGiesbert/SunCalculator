@@ -8,10 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		7EECE71B91CA488078EB457F /* SunCalculatorV1.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EECE47A8280D28731C4D5F2 /* SunCalculatorV1.m */; };
+		7EECE7E08447A5B202EB664A /* SunCalculatorV3.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EECE436A3A4395AC1C5A773 /* SunCalculatorV3.m */; };
 		7EECE81687CDD9825413B548 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7EECEE9879316AF921FA1B57 /* Assets.xcassets */; };
 		7EECE8E96DEBC0DC51B7B8B0 /* SunCalculatorV2.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EECE917BC19A705F4E1EBC5 /* SunCalculatorV2.m */; };
 		7EECE9001AF22252D9A22704 /* SunCalculatorUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EECE2098C4D3006CCB8EB75 /* SunCalculatorUITests.m */; };
 		7EECEA1F2B2878CA67323346 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EECE899E1438EE1EB49F8F5 /* AppDelegate.m */; };
+		7EECEA9FF14DC8C557F57DD5 /* MyLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EECED1FF16F97C586FF8F98 /* MyLog.m */; };
 		7EECEAB429FB211DFB575F5B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7EECE22B4A27DA2B0A7D85E7 /* LaunchScreen.storyboard */; };
 		7EECEB3DFF256EA58DBD1A42 /* SunCalculatorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EECE0FDF8CE5282BF09150C /* SunCalculatorTests.m */; };
 		7EECEBF1C0D58814AA93E215 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EECE205437016635A164D29 /* main.m */; };
@@ -47,6 +49,7 @@
 		7EECE314D1A20623C89C13B9 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		7EECE32CD31983BE1FF7CB22 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.info; path = Info.plist; sourceTree = "<group>"; };
 		7EECE3E1F71BCFC05BAACDC7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.info; path = Info.plist; sourceTree = "<group>"; };
+		7EECE436A3A4395AC1C5A773 /* SunCalculatorV3.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SunCalculatorV3.m; sourceTree = "<group>"; };
 		7EECE47A8280D28731C4D5F2 /* SunCalculatorV1.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SunCalculatorV1.m; sourceTree = "<group>"; };
 		7EECE511B0FF950A0C82B7AB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.info; path = Info.plist; sourceTree = "<group>"; };
 		7EECE648B0A53894728B10CA /* SunCalculatorV1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SunCalculatorV1.h; sourceTree = "<group>"; };
@@ -54,11 +57,14 @@
 		7EECE899E1438EE1EB49F8F5 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		7EECE8B76FB85E25242FBBB9 /* DateTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DateTool.h; sourceTree = "<group>"; };
 		7EECE917BC19A705F4E1EBC5 /* SunCalculatorV2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SunCalculatorV2.m; sourceTree = "<group>"; };
+		7EECEA95D8EE068B75786E4E /* SunCalculatorV3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SunCalculatorV3.h; sourceTree = "<group>"; };
 		7EECEB9A746B2E18CBDDE6CF /* SunCalculatorUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SunCalculatorUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7EECEC10E1556034CC9C1132 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		7EECED1FF16F97C586FF8F98 /* MyLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyLog.m; sourceTree = "<group>"; };
 		7EECEDBDF529CFA6CC3D74AA /* SunCalculatorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SunCalculatorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7EECEE9879316AF921FA1B57 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7EECEF7F0B76052F23B4A385 /* SunCalculatorV2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SunCalculatorV2.h; sourceTree = "<group>"; };
+		7EECEF9FD98AD50A7CD467C3 /* MyLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLog.h; sourceTree = "<group>"; };
 		7EECEFCE44CA9972A6E7082C /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -105,6 +111,10 @@
 				7EECEF7F0B76052F23B4A385 /* SunCalculatorV2.h */,
 				7EECE0CD4C6B079A25B5C64B /* DateTool.m */,
 				7EECE8B76FB85E25242FBBB9 /* DateTool.h */,
+				7EECED1FF16F97C586FF8F98 /* MyLog.m */,
+				7EECEF9FD98AD50A7CD467C3 /* MyLog.h */,
+				7EECE436A3A4395AC1C5A773 /* SunCalculatorV3.m */,
+				7EECEA95D8EE068B75786E4E /* SunCalculatorV3.h */,
 			);
 			path = SunCalculator;
 			sourceTree = "<group>";
@@ -285,6 +295,8 @@
 				7EECE71B91CA488078EB457F /* SunCalculatorV1.m in Sources */,
 				7EECE8E96DEBC0DC51B7B8B0 /* SunCalculatorV2.m in Sources */,
 				7EECEDD713691C033A4CAB8F /* DateTool.m in Sources */,
+				7EECEA9FF14DC8C557F57DD5 /* MyLog.m in Sources */,
+				7EECE7E08447A5B202EB664A /* SunCalculatorV3.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -20,12 +20,19 @@
     return nil != date;
 }
 
-+ (NSDate *)getDateForYear:(int)inputYear month:(int)inputMonth day:(int)inputDay{
++ (NSDate *)getDateForYear:(int)year month:(int)month day:(int)day {
+
+    return [self getDateForYear:year month:month day:day hour:0 minute:0];
+}
+
++ (NSDate *)getDateForYear:(int)year month:(int)month day:(int)day hour:(int)hour minute:(int)minute {
 
     NSDateComponents *comp = [[NSDateComponents alloc] init];
-    comp.year = inputYear;
-    comp.month = inputMonth;
-    comp.day = inputDay;
+    comp.year = year;
+    comp.month = month;
+    comp.day = day;
+    comp.hour = hour;
+    comp.minute = minute;
 
     NSCalendar *cal = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
     [cal setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
@@ -58,6 +65,21 @@
 
     NSDate *date = [self getDateForYear:inputYear month:inputMonth day:inputDay];
     return [self getDayCountSince2000For:date];
+}
+
+
++ (NSDate *)julianDaysToGregorianDate:(double)julianDays{
+
+    double daysSince2000 = julianDays - JULIAN_DAY_COUNT_AT_01_01_2000;
+
+    int secondsPerDay = 86400;
+
+    double secondsSince2000 = daysSince2000 * secondsPerDay;
+
+    NSDate *date2000 = [self getDateForYear:2000 month:1 day:1 hour:12 minute:0];
+    NSDate *resultDate = [date2000 dateByAddingTimeInterval:secondsSince2000];
+
+    return resultDate;
 }
 
 @end
